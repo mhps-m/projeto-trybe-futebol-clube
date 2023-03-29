@@ -9,7 +9,7 @@ const options: jwt.SignOptions = {
 
 export default class Auth {
   public static createToken<T>(payload: T & (object | string)): string {
-    const token: string = jwt.sign(payload, secret, options);
+    const token: string = jwt.sign({ data: payload }, secret, options);
     console.log(secret);
     return token;
   }
@@ -18,7 +18,7 @@ export default class Auth {
     try {
       const decoded: jwt.JwtPayload = jwt.verify(token, secret) as jwt.JwtPayload;
 
-      return decoded as T;
+      return decoded.data as T;
     } catch (err) {
       return false;
     }

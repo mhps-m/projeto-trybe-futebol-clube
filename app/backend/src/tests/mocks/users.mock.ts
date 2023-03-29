@@ -13,6 +13,8 @@ export const loginMock = {
 export const loginErrors = {
   missingFields: 'All fields must be filled',
   invalidFields: 'Invalid email or password',
+  missingToken: 'Token not found',
+  invalidToken: 'Token must be a valid token',
 };
 
 export const invalidEmailMock = {
