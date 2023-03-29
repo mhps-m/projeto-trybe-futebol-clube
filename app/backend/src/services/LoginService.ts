@@ -6,7 +6,7 @@ import Auth from '../auth/Auth';
 import loginSchema from './validations/schemas';
 
 export default class LoginService {
-  private static async verifyCredentials(credentials: ILogin): Promise<boolean> {
+  public static async getByCredentials(credentials: ILogin): Promise<IUser | false> {
     const user: IUser | null = await User.findOne({ where: {
       email: credentials.email,
     } });
@@ -15,7 +15,9 @@ export default class LoginService {
 
     const checkPassword: boolean = bcrypt.compareSync(credentials.password, user.password);
 
-    return checkPassword;
+    if (!checkPassword) return false;
+
+    return user;
   }
 
   public static async login(credentials: ILogin): Promise<string> {
@@ -23,13 +25,13 @@ export default class LoginService {
       throw new HttpError(400, 'All fields must be filled');
     }
 
-    const verifyCredentials = await LoginService.verifyCredentials(credentials);
+    const user = await LoginService.getByCredentials(credentials);
     const { error } = loginSchema.validate(credentials);
 
-    if (!verifyCredentials || error) {
+    if (!user || error) {
       throw new HttpError(401, 'Invalid email or password');
     }
 
-    return Auth.createToken<ILogin>(credentials);
+    return Auth.createToken<ILogin>(user);
   }
 }
