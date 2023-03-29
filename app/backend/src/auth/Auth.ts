@@ -10,6 +10,7 @@ const options: jwt.SignOptions = {
 export default class Auth {
   public static createToken<T>(payload: T & (object | string)): string {
     const token: string = jwt.sign(payload, secret, options);
+    console.log(secret);
     return token;
   }
 

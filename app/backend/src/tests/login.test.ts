@@ -14,9 +14,7 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-process.env.JWT_SECRET = 'segredo';
-
-const SECRET = process.env.JWT_SECRET;
+const SECRET = 'suaSenhaSecreta';
 
 describe('Testes de integração para a rota /login', function() {
   let chaiHttpResponse: Response;
@@ -38,7 +36,8 @@ describe('Testes de integração para a rota /login', function() {
     expect(chaiHttpResponse.status).to.deep.equal(200);
     expect(typeof chaiHttpResponse.body.token).to.deep.equal('string');
 
-    expect(jwt.verify(chaiHttpResponse.body.token, SECRET)).to.deep.equal(true);
+    expect(!!jwt.verify(chaiHttpResponse.body.token, SECRET))
+      .to.deep.equal(true);
   });
 
   describe('Testa se retorna erro ao passar dados incompletos', function() {
