@@ -7,9 +7,12 @@ import loginSchema from './validations/schemas';
 
 export default class LoginService {
   public static async getByCredentials(credentials: ILogin): Promise<IUser | false> {
-    const user: IUser | null = await User.findOne({ where: {
-      email: credentials.email,
-    } });
+    const user: IUser | null = await User.findOne({
+      where: {
+        email: credentials.email,
+      },
+      raw: true,
+    });
 
     if (!user) return false;
 
@@ -25,13 +28,13 @@ export default class LoginService {
       throw new HttpError(400, 'All fields must be filled');
     }
 
-    const user = await LoginService.getByCredentials(credentials);
+    const user: IUser | false = await LoginService.getByCredentials(credentials);
     const { error } = loginSchema.validate(credentials);
 
     if (!user || error) {
       throw new HttpError(401, 'Invalid email or password');
     }
 
-    return Auth.createToken<ILogin>(user);
+    return Auth.createToken<ILogin>(credentials);
   }
 }
