@@ -5,7 +5,7 @@ import User from '../database/models/UserModel';
 import Auth from '../auth/auth';
 
 export default class LoginService {
-  private static async checkCredentials(credentials: ILogin): Promise<boolean> {
+  private static async verifyCredentials(credentials: ILogin): Promise<boolean> {
     const user: IUser | null = await User.findOne({ where: {
       email: credentials.email,
     } });
@@ -18,9 +18,13 @@ export default class LoginService {
   }
 
   public static async login(credentials: ILogin): Promise<string> {
-    const checkCredentials = LoginService.checkCredentials(credentials);
+    if (!credentials.email || !credentials.password) {
+      throw new HttpError(400, 'All fields must be filled');
+    }
 
-    if (!checkCredentials) throw new HttpError(401, 'Invalid email or password');
+    const verifyCredentials = LoginService.verifyCredentials(credentials);
+
+    if (!verifyCredentials) throw new HttpError(401, 'Invalid email or password');
 
     return Auth.createToken<ILogin>(credentials);
   }
