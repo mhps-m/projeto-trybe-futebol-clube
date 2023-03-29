@@ -13,7 +13,7 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Testes de integração para tabela "teams"', function() {
+describe('Testes de integração para a rota /teams', function() {
   let chaiHttpResponse: Response;
 
   describe('Testa a rota GET /teams, retornando todos os times cadastrados', function() {
