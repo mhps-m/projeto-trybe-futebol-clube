@@ -3,6 +3,7 @@ import { IUser, ILogin } from '../interfaces/IUser';
 import HttpError from '../utils/HttpError';
 import User from '../database/models/UserModel';
 import Auth from '../auth/Auth';
+import loginSchema from './validations/schemas';
 
 export default class LoginService {
   private static async verifyCredentials(credentials: ILogin): Promise<boolean> {
@@ -23,8 +24,11 @@ export default class LoginService {
     }
 
     const verifyCredentials = await LoginService.verifyCredentials(credentials);
+    const { error } = loginSchema.validate(credentials);
 
-    if (!verifyCredentials) throw new HttpError(401, 'Invalid email or password');
+    if (!verifyCredentials || error) {
+      throw new HttpError(401, 'Invalid email or password');
+    }
 
     return Auth.createToken<ILogin>(credentials);
   }

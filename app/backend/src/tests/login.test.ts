@@ -8,7 +8,15 @@ import { Response } from 'superagent';
 import { app } from '../app';
 import User from '../database/models/UserModel';
 
-import { loginMock, userMock } from './mocks/users.mock';
+import {
+  loginMock,
+  userMock,
+  loginErrors,
+  invalidEmailMock,
+  invalidEmailLoginMock,
+  invalidPasswordMock,
+  invalidPasswordLoginMock,
+} from './mocks/users.mock';
 
 chai.use(chaiHttp);
 
@@ -50,7 +58,7 @@ describe('Testes de integração para a rota /login', function() {
         });
 
       expect(chaiHttpResponse.status).to.deep.equal(400);
-      expect(chaiHttpResponse.body).to.deep.equal({ message: 'All fields must be filled' });
+      expect(chaiHttpResponse.body).to.deep.equal({ message: loginErrors.missingFields });
     });
 
     it('Ao passar apenas a senha', async function() {
@@ -62,7 +70,71 @@ describe('Testes de integração para a rota /login', function() {
         });
 
       expect(chaiHttpResponse.status).to.deep.equal(400);
-      expect(chaiHttpResponse.body).to.deep.equal({ message: 'All fields must be filled' });
+      expect(chaiHttpResponse.body).to.deep.equal({ message: loginErrors.missingFields });
+    });
+  });
+
+  describe('Testa se retorna erro ao passar dados incorretos', function() {
+    it('Ao passar email inexistente', async function() {
+      sinon
+        .stub(User, 'findOne')
+        .resolves(null);
+
+      chaiHttpResponse = await chai
+        .request(app)
+        .post('/login')
+        .send({
+          email: 'email@inexistente.com',
+          password: 'senha123',
+        });
+
+      expect(chaiHttpResponse.status).to.deep.equal(401);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: loginErrors.invalidFields });
+    });
+
+    it('Ao passar email correto com formato inválido', async function() {
+      sinon
+        .stub(User, 'findOne')
+        .resolves({ ...invalidEmailMock } as User);
+
+      chaiHttpResponse = await chai
+        .request(app)
+        .post('/login')
+        .send(invalidEmailLoginMock);
+
+      expect(chaiHttpResponse.status).to.deep.equal(401);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: loginErrors.invalidFields });
+    });
+
+    it('Ao passar senha incorreta', async function() {
+      sinon
+        .stub(User, 'findOne')
+        .resolves(userMock as User);
+
+      chaiHttpResponse = await chai
+        .request(app)
+        .post('/login')
+        .send({
+          email: userMock.email,
+          password: 'senhaIncorreta',
+        });
+
+      expect(chaiHttpResponse.status).to.deep.equal(401);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: loginErrors.invalidFields });
+    });
+
+    it('Ao passar senha correta com formato inválido', async function() {
+      sinon
+        .stub(User, 'findOne')
+        .resolves(invalidPasswordMock as User);
+
+      chaiHttpResponse = await chai
+        .request(app)
+        .post('/login')
+        .send(invalidPasswordLoginMock);
+
+      expect(chaiHttpResponse.status).to.deep.equal(401);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: loginErrors.invalidFields });
     });
   });
 });
