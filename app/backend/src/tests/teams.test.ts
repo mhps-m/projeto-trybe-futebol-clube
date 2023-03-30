@@ -16,20 +16,16 @@ const { expect } = chai;
 describe('Testes de integração para a rota /teams', function() {
   let chaiHttpResponse: Response;
 
+  afterEach(sinon.restore);
+
   describe('Testa a rota GET /teams, retornando todos os times cadastrados', function() {
-    beforeEach(async function() {
+    it('Testa se a requisição retorna os dados corretamente', async function() {
       sinon
         .stub(Team, 'findAll')
         .resolves([
           ...teamsMock,
         ] as Team[]);
-    });
 
-    afterEach(function() {
-      (Team.findAll as sinon.SinonStub).restore();
-    });
-
-    it('Testa se a requisição retorna os dados corretamente', async function() {
       chaiHttpResponse = await chai
         .request(app)
         .get('/teams');
@@ -40,8 +36,6 @@ describe('Testes de integração para a rota /teams', function() {
   });
 
   describe('Testa a rota GET /teams/:id, retornando o time com id correspondente', function() {
-    afterEach(sinon.restore);
-
     it('Testa se a requisição retorna um time ao passar um id existente', async function() {
       sinon
         .stub(Team, 'findByPk')

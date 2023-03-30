@@ -1,11 +1,9 @@
-import ITeam from '../../interfaces/ITeam';
-
-export const teamMock: ITeam = {
+export const teamMock = {
   id: 1,
   teamName: 'Flamengo',
 };
 
-export const teamsMock: ITeam[] = [
+export const teamsMock = [
   {
     id: 1,
     teamName: 'Flamengo',

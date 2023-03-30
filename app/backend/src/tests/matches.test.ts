@@ -8,23 +8,26 @@ import { app } from '../app';
 import Match from '../database/models/MatchModel';
 
 import { matchesMock } from './mocks/matches.mock';
+import IMatch from '../interfaces/IMatch';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Testes de integração para a rota /matches', () => {
+describe('Testes de integração para a rota /matches', function() {
   let chaiHttpResponse: Response;
 
-  describe('Testa a rota GET /teams, retornando todos os times cadastrados', () => {
-    it('Retorna os times com sucesso', async () => {
+  afterEach(sinon.restore);
+
+  describe('Testa a rota GET /matches, retornando todos os times cadastrados', function() {
+    it('Retorna os times com sucesso', async function() {
       sinon
         .stub(Match, 'findAll')
-        .resolves(matchesMock as Match);
+        .resolves(matchesMock as IMatch[] & Match[]);
 
       chaiHttpResponse = await chai
         .request(app)
-        .get('/teams');
+        .get('/matches');
 
       expect(chaiHttpResponse.status).to.deep.equal(200);
       expect(chaiHttpResponse.body).to.deep.equal(matchesMock);
