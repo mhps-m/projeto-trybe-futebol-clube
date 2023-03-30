@@ -15,7 +15,7 @@ export const matchesMock = [{
   homeTeamGoals: 1,
   awayTeamId: 2,
   awayTeamGoals: 1,
-  inProgress: true,
+  inProgress: false,
   homeTeam: {
     teamName: 'Fluminense',
   },
