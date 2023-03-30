@@ -10,4 +10,13 @@ export default class MatchesService {
 
     return teams as IMatch[] & Match[];
   }
+
+  public static async finish(id: string): Promise<number> {
+    const [affectedCount] = await Match.update(
+      { inProgress: false },
+      { where: { id } },
+    );
+
+    return affectedCount;
+  }
 }
