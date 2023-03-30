@@ -3,12 +3,11 @@ import Match from '../database/models/MatchModel';
 
 export default class MatchesService {
   public static async findAll(): Promise<IMatch[]> {
-    const teams = await Match.findAll({
-      raw: true,
+    const teams: Match[] = await Match.findAll({
       nest: true,
       include: { all: true, attributes: ['teamName'] },
-    }) as IMatch[] & Match[];
+    });
 
-    return teams;
+    return teams as IMatch[] & Match[];
   }
 }

@@ -11,7 +11,6 @@ export default class LoginService {
       where: {
         email: credentials.email,
       },
-      raw: true,
     });
 
     if (!user) return false;
