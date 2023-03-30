@@ -3,7 +3,7 @@ import { IUser, ILogin } from '../interfaces/IUser';
 import HttpError from '../utils/HttpError';
 import User from '../database/models/UserModel';
 import Auth from '../auth/Auth';
-import loginSchema from './validations/schemas';
+import { loginSchema } from './validations/schemas';
 
 export default class LoginService {
   public static async getByCredentials(credentials: ILogin): Promise<IUser | false> {

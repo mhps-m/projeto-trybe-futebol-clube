@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import HttpError from '../utils/HttpError';
 import IMatch from '../interfaces/IMatch';
 import MatchesService from '../services/MatchesService';
 
@@ -19,12 +18,16 @@ export default class MatchesController {
   public static async finish(req: Request, res: Response): Promise<Response> {
     const { id }: { id?: string } = req.params;
 
-    const finishMatch: number = await MatchesService.finish(id);
-
-    if (finishMatch === 0) {
-      throw new HttpError(404, 'Match not found or already finished');
-    }
+    await MatchesService.finish(id);
 
     return res.status(200).json({ message: 'Finished' });
+  }
+
+  public static async update(req: Request, res: Response): Promise<Response> {
+    const { id }: { id?: string } = req.params;
+
+    await MatchesService.update(id, req.body);
+
+    return res.status(200).json({ message: 'Updated' });
   }
 }
