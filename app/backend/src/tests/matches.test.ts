@@ -162,4 +162,139 @@ describe('Testes de integração para a rota /matches', function() {
       expect(chaiHttpResponse.body).to.deep.equal({ message: 'Match not found or already finished' });
     });
   });
+
+  describe('Testa a rota PATCH /matches/:id, permitindo atualizar o placar de uma partida em andamento', function() {
+    it('Atualiza uma partida em andamento com sucesso', async function() {
+      sinon
+        .stub(User, 'findOne')
+        .resolves(userMock as User);
+
+      getToken = await chai
+        .request(app)
+        .post('/login')
+        .send(loginMock);
+
+      const { body: { token } } = getToken;
+
+      sinon
+        .stub(Match, 'findByPk')
+        .resolves(matchesMock[0] as IMatch & Match);
+
+      sinon
+        .stub(Match, 'update')
+        .resolves([1]);
+
+      chaiHttpResponse = await chai
+        .request(app)
+        .patch('/matches/1')
+        .set('authorization', token)
+        .send({
+          homeTeamGoals: 3,
+          awayTeamGoals: 4,
+        });
+
+      expect(chaiHttpResponse.status).to.deep.equal(200);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: 'Updated' });
+    });
+
+    it('Retorna erro ao tentar atualizar uma partida sem passar um token', async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .patch('/matches/1/');
+
+      expect(chaiHttpResponse.status).to.deep.equal(401);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: 'Token not found' });
+    });
+
+    it('Retorna erro ao passar um token inválido', async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .patch('/matches/1/')
+        .set('authorization', 'invalidToken');
+
+      expect(chaiHttpResponse.status).to.deep.equal(401);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: 'Token must be a valid token' });
+    });
+
+    it('Retorna erro ao tentar atualizar uma partida sem passar um novo valor de placar para um dos times', async function() {
+      sinon
+        .stub(User, 'findOne')
+        .resolves(userMock as User);
+
+      getToken = await chai
+        .request(app)
+        .post('/login')
+        .send(loginMock);
+
+      const { body: { token } } = getToken;
+
+      sinon
+        .stub(Match, 'findByPk')
+        .resolves(matchesMock[0] as IMatch & Match);
+
+      chaiHttpResponse = await chai
+        .request(app)
+        .patch('/matches/1')
+        .set('authorization', token);
+
+      expect(chaiHttpResponse.status).to.deep.equal(400);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: 'Missing a new goal value to at least one of the teams' });
+    });
+
+    it('Retorna erro ao tentar atualizar uma partida já finalizada', async () => {
+      sinon
+        .stub(User, 'findOne')
+        .resolves(userMock as User);
+
+      getToken = await chai
+        .request(app)
+        .post('/login')
+        .send(loginMock);
+
+      const { body: { token } } = getToken;
+
+      sinon
+        .stub(Match, 'findByPk')
+        .resolves(matchesMock[1] as IMatch & Match);
+
+      chaiHttpResponse = await chai
+        .request(app)
+        .patch('/matches/2/')
+        .set('authorization', token)
+        .send({
+          homeTeamGoals: 5,
+        });
+
+      expect(chaiHttpResponse.status).to.deep.equal(404);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: 'Match not found or already finished' });
+    });
+
+    it('Retorna erro ao tentar atualizar uma partida inexistente', async () => {
+      sinon
+        .stub(User, 'findOne')
+        .resolves(userMock as User);
+
+      getToken = await chai
+        .request(app)
+        .post('/login')
+        .send(loginMock);
+
+      const { body: { token } } = getToken;
+
+      sinon
+        .stub(Match, 'findByPk')
+        .resolves(null);
+
+      chaiHttpResponse = await chai
+        .request(app)
+        .patch('/matches/99/')
+        .set('authorization', token)
+        .send({
+          homeTeamGoals: 5,
+        });
+
+      expect(chaiHttpResponse.status).to.deep.equal(404);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: 'Match not found or already finished' });
+    });
+  });
 });
