@@ -9,10 +9,10 @@ export default class TeamsService {
     return teams;
   }
 
-  public static async findById(id: string): Promise<ITeam> {
+  public static async findById(id: string | number): Promise<ITeam> {
     const team: ITeam | null = await Team.findByPk(id);
 
-    if (!team) throw new HttpError(404, 'Team not found');
+    if (!team) throw new HttpError(404, 'There is no team with such id!');
 
     return team;
   }

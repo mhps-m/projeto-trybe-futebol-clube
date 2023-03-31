@@ -13,13 +13,13 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Testes de integração para a rota /teams', function() {
+describe('Testes de integração para a rota /teams', () => {
   let chaiHttpResponse: Response;
 
   afterEach(sinon.restore);
 
-  describe('Testa a rota GET /teams, retornando todos os times cadastrados', function() {
-    it('Testa se a requisição retorna os dados corretamente', async function() {
+  describe('Testa a rota GET /teams, retornando todos os times cadastrados', () => {
+    it('Testa se a requisição retorna os dados corretamente', async () => {
       sinon
         .stub(Team, 'findAll')
         .resolves([
@@ -35,8 +35,8 @@ describe('Testes de integração para a rota /teams', function() {
     });
   });
 
-  describe('Testa a rota GET /teams/:id, retornando o time com id correspondente', function() {
-    it('Testa se a requisição retorna um time ao passar um id existente', async function() {
+  describe('Testa a rota GET /teams/:id, retornando o time com id correspondente', () => {
+    it('Testa se a requisição retorna um time ao passar um id existente', async () => {
       sinon
         .stub(Team, 'findByPk')
         .resolves(teamMock as Team);
@@ -49,7 +49,7 @@ describe('Testes de integração para a rota /teams', function() {
       expect(chaiHttpResponse.body).to.deep.equal(teamMock);
     });
 
-    it('Testa se a requisição retorna um erro quando um time correspondente não é encontrado', async function() {
+    it('Testa se a requisição retorna um erro quando um time correspondente não é encontrado', async () => {
       sinon
         .stub(Team, 'findByPk')
         .resolves(undefined);
@@ -59,7 +59,7 @@ describe('Testes de integração para a rota /teams', function() {
         .get('/teams/20');
 
       expect(chaiHttpResponse.status).to.deep.equal(404);
-      expect(chaiHttpResponse.body).to.deep.equal({ message: 'Team not found' });
+      expect(chaiHttpResponse.body).to.deep.equal({ message: 'There is no team with such id!' });
     });
   });
 });

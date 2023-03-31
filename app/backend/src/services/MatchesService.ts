@@ -1,7 +1,8 @@
 import HttpError from '../utils/HttpError';
-import IMatch, { IGoals } from '../interfaces/IMatch';
+import IMatch, { IGoals, INewMatch } from '../interfaces/IMatch';
 import Match from '../database/models/MatchModel';
-import { updateMatchSchema } from './validations/schemas';
+import { newMatchSchema, updateMatchSchema } from './validations/schemas';
+import TeamsService from './TeamsService';
 
 export default class MatchesService {
   public static async findAll(): Promise<IMatch[]> {
@@ -54,5 +55,30 @@ export default class MatchesService {
     );
 
     return affectedCount;
+  }
+
+  private static async validateNewMatch(matchData: INewMatch): Promise<void> {
+    const { error } = newMatchSchema.validate(matchData);
+
+    if (error) throw new HttpError(400, 'All fields must be filled');
+
+    const { homeTeamId, awayTeamId } = matchData;
+
+    // Checks if both teams exist, throws error otherwise
+    await Promise.all(
+      [homeTeamId, awayTeamId].map((id) => TeamsService.findById(id)),
+    );
+
+    if (homeTeamId === awayTeamId) {
+      throw new HttpError(422, 'It is not possible to create a match with two equal teams');
+    }
+  }
+
+  public static async create(matchData: INewMatch): Promise<Match> {
+    await MatchesService.validateNewMatch(matchData);
+
+    const newMatch: Match = await Match.create({ ...matchData, inProgress: true });
+
+    return newMatch;
   }
 }

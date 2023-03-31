@@ -9,3 +9,10 @@ export const updateMatchSchema: Joi.ObjectSchema = Joi.object().keys({
   homeTeamGoals: Joi.number(),
   awayTeamGoals: Joi.number(),
 }).or('homeTeamGoals', 'awayTeamGoals');
+
+export const newMatchSchema: Joi.ObjectSchema = Joi.object().keys({
+  homeTeamId: Joi.number(),
+  homeTeamGoals: Joi.number(),
+  awayTeamId: Joi.number(),
+  awayTeamGoals: Joi.number(),
+}).required();

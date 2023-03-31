@@ -30,4 +30,10 @@ export default class MatchesController {
 
     return res.status(200).json({ message: 'Updated' });
   }
+
+  public static async create(req: Request, res: Response): Promise<Response> {
+    const newMatch = await MatchesService.create(req.body);
+
+    return res.status(201).json(newMatch);
+  }
 }
