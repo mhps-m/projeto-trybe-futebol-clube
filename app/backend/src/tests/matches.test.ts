@@ -7,10 +7,12 @@ import { Response } from 'superagent';
 import { app } from '../app';
 import Match from '../database/models/MatchModel';
 
-import { matchesMock } from './mocks/matches.mock';
+import { matchesMock, newMatchDataMock, newMatchMock } from './mocks/matches.mock';
+import { teamMock } from './mocks/teams.mock';
 import IMatch from '../interfaces/IMatch';
 import User from '../database/models/UserModel';
 import { loginMock, userMock } from './mocks/users.mock';
+import Team from '../database/models/TeamModel';
 
 chai.use(chaiHttp);
 
@@ -295,6 +297,142 @@ describe('Testes de integração para a rota /matches', function() {
 
       expect(chaiHttpResponse.status).to.deep.equal(404);
       expect(chaiHttpResponse.body).to.deep.equal({ message: 'Match not found or already finished' });
+    });
+  });
+
+  describe('Testa a rota POST /matches, permitindo cadastrar uma nova partida', function() {
+    it('Cadastra uma partida com sucesso', async function() {
+      sinon
+        .stub(User, 'findOne')
+        .resolves(userMock as User);
+
+      getToken = await chai
+        .request(app)
+        .post('/login')
+        .send(loginMock);
+
+      const { body: { token } } = getToken;
+
+      sinon
+        .stub(Team, 'findByPk')
+        .resolves(teamMock as Team);
+
+      sinon
+        .stub(Match, 'create')
+        .resolves(newMatchMock as Match);
+
+      chaiHttpResponse = await chai
+        .request(app)
+        .post('/matches/')
+        .set('authorization', token)
+        .send(newMatchDataMock);
+
+      expect(chaiHttpResponse.status).to.deep.equal(201);
+      expect(chaiHttpResponse.body).to.deep.equal(newMatchMock);
+    });
+
+    it('Retorna erro ao tentar cadastrar uma partida sem passar um token', async function() {
+      chaiHttpResponse = await chai
+        .request(app)
+        .post('/matches/')
+        .send(newMatchDataMock);
+
+      expect(chaiHttpResponse.status).to.deep.equal(401);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: 'Token not found' });
+    });
+
+    it('Retorna erro ao tentar cadastrar uma partida com token inválido', async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .post('/matches/')
+        .set('authorization', 'invalidToken')
+        .send(newMatchDataMock);
+
+      expect(chaiHttpResponse.status).to.deep.equal(401);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: 'Token must be a valid token' });
+    });
+
+    it('Retorna erro ao tentar cadastrar uma partida sem passar todos os campos necessários na requisição', async () => {
+      sinon
+        .stub(User, 'findOne')
+        .resolves(userMock as User);
+
+      getToken = await chai
+        .request(app)
+        .post('/login')
+        .send(loginMock);
+
+      const { body: { token } } = getToken;
+
+      chaiHttpResponse = await chai
+        .request(app)
+        .post('/matches/')
+        .set('authorization', token)
+        .send({
+          homeTeamId: 1,
+          awayTeamId: 2,
+        });
+
+      expect(chaiHttpResponse.status).to.deep.equal(400);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: 'All fields must be filled' });
+    });
+
+    it('Retorna erro ao tentar cadastrar uma partida com dois times iguais', async () => {
+      sinon
+        .stub(User, 'findOne')
+        .resolves(userMock as User);
+
+      getToken = await chai
+        .request(app)
+        .post('/login')
+        .send(loginMock);
+
+      const { body: { token } } = getToken;
+
+      chaiHttpResponse = await chai
+        .request(app)
+        .post('/matches/')
+        .set('authorization', token)
+        .send({
+          homeTeamId: 1,
+          awayTeamId: 1,
+          homeTeamGoals: 0,
+          awayTeamGoals: 0,
+        });
+
+      expect(chaiHttpResponse.status).to.deep.equal(422);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: 'It is not possible to create a match with two equal teams' });
+    });
+
+    it('Retorna erro ao tentar cadastrar uma partida com times inexistentes', async () => {
+      sinon
+        .stub(User, 'findOne')
+        .resolves(userMock as User);
+
+      getToken = await chai
+        .request(app)
+        .post('/login')
+        .send(loginMock);
+
+      const { body: { token } } = getToken;
+
+      sinon
+        .stub(Team, 'findByPk')
+        .resolves(null);
+
+      chaiHttpResponse = await chai
+        .request(app)
+        .post('/matches/')
+        .set('authorization', token)
+        .send({
+          homeTeamId: 55,
+          awayTeamId: 40,
+          homeTeamGoals: 0,
+          awayTeamGoals: 0,
+        });
+
+      expect(chaiHttpResponse.status).to.deep.equal(404);
+      expect(chaiHttpResponse.body).to.deep.equal({ message: 'There is no team with such id!' });
     });
   });
 });

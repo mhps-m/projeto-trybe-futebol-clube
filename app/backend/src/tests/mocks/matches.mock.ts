@@ -8,6 +8,9 @@ export const matchesMock = [{
   homeTeam: {
     teamName: 'Flamengo',
   },
+  awayTeam: {
+    teamName: 'Cruzeiro',
+  },
 },
 {
   id: 2,
@@ -19,4 +22,23 @@ export const matchesMock = [{
   homeTeam: {
     teamName: 'Fluminense',
   },
+  awayTeam: {
+    teamName: 'Corinthians',
+  },
 }];
+
+export const newMatchDataMock = {
+  homeTeamId: 1,
+  homeTeamGoals: 0,
+  awayTeamId: 2,
+  awayTeamGoals: 0,
+};
+
+export const newMatchMock = {
+  id: 3,
+  homeTeamId: 1,
+  homeTeamGoals: 0,
+  awayTeamId: 2,
+  awayTeamGoals: 0,
+  inProgress: true,
+};

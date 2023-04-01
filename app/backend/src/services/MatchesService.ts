@@ -64,14 +64,14 @@ export default class MatchesService {
 
     const { homeTeamId, awayTeamId } = matchData;
 
+    if (homeTeamId === awayTeamId) {
+      throw new HttpError(422, 'It is not possible to create a match with two equal teams');
+    }
+
     // Checks if both teams exist, throws error otherwise
     await Promise.all(
       [homeTeamId, awayTeamId].map((id) => TeamsService.findById(id)),
     );
-
-    if (homeTeamId === awayTeamId) {
-      throw new HttpError(422, 'It is not possible to create a match with two equal teams');
-    }
   }
 
   public static async create(matchData: INewMatch): Promise<Match> {
