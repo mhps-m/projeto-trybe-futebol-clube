@@ -6,21 +6,21 @@ import TeamsService from './TeamsService';
 
 export default class MatchesService {
   public static async findAll(): Promise<IMatch[]> {
-    const teams: Match[] = await Match.findAll({
+    const matches: Match[] = await Match.findAll({
       nest: true,
       include: { all: true, attributes: ['teamName'] },
     });
 
-    return teams as IMatch[] & Match[];
+    return matches as IMatch[] & Match[];
   }
 
   private static async findById(id: string): Promise<IMatch | null> {
-    const team: Match | null = await Match.findByPk(id, {
+    const match: Match | null = await Match.findByPk(id, {
       nest: true,
       include: { all: true, attributes: ['teamName'] },
     });
 
-    return team as IMatch & Match | null;
+    return match as IMatch & Match | null;
   }
 
   public static async finish(id: string): Promise<number> {

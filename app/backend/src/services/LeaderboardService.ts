@@ -17,7 +17,7 @@ export default class LeaderboardService extends LeaderboardOperations {
     const goalsFavor = this.countGoalsFavor(id, homeOrAway);
     const goalsOwn = this.countGoalsOwn(id, homeOrAway);
     const goalsBalance = goalsFavor - goalsOwn;
-    const efficiency = Math.round((totalPoints / (totalGames * 3)) * 1e4) / 1e2;
+    const efficiency = ((totalPoints / (totalGames * 3)) * 100).toFixed(2);
 
     const firstHalf = { name, totalPoints, totalGames, totalVictories, totalDraws, totalLosses };
     const secondHalf = { goalsFavor, goalsOwn, goalsBalance, efficiency };
@@ -28,7 +28,7 @@ export default class LeaderboardService extends LeaderboardOperations {
   public getTeamsLeaderboard(
     teams: ITeam[],
     homeOrAway: 'home' | 'away',
-  ) {
+  ): ILeaderboard[] {
     const teamsLeaderboard = teams.map((team) => this.teamLeaderboard(team, homeOrAway));
 
     teamsLeaderboard.sort((a, b) => (

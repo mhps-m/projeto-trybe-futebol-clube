@@ -7,7 +7,7 @@ export default class LeaderboardOperations {
     this.matches = matches;
   }
 
-  public countTotalGames(
+  protected countTotalGames(
     id: number | string,
     homeOrAway: 'home' | 'away',
   ): number {
@@ -21,11 +21,11 @@ export default class LeaderboardOperations {
     return totalGames;
   }
 
-  private static enemyTeamIs(homeOrAway: 'home' | 'away') {
+  protected static enemyTeamIs(homeOrAway: 'home' | 'away') {
     return homeOrAway === 'home' ? 'away' : 'home';
   }
 
-  public countTotalVictories(
+  protected countTotalVictories(
     id: number | string,
     homeOrAway: 'home' | 'away',
   ): number {
@@ -42,7 +42,7 @@ export default class LeaderboardOperations {
     return totalVictories;
   }
 
-  public countTotalLosses(
+  protected countTotalLosses(
     id: number | string,
     homeOrAway: 'home' | 'away',
   ): number {
@@ -59,7 +59,7 @@ export default class LeaderboardOperations {
     return totalLosses;
   }
 
-  public countTotalDraws(
+  protected countTotalDraws(
     id: number | string,
     homeOrAway: 'home' | 'away',
   ): number {
@@ -76,7 +76,7 @@ export default class LeaderboardOperations {
     return totalDraws;
   }
 
-  public countGoalsOwn(
+  protected countGoalsOwn(
     id: number | string,
     homeOrAway: 'home' | 'away',
   ): number {
@@ -92,7 +92,7 @@ export default class LeaderboardOperations {
     return goalsOwn;
   }
 
-  public countGoalsFavor(
+  protected countGoalsFavor(
     id: number | string,
     homeOrAway: 'home' | 'away',
   ): number {
