@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import ITeam from '../interfaces/ITeam';
-import TeamsService from '../services/TeamsService';
+import { ITeam } from '../interfaces';
+import { TeamsService } from '../services';
 
 export default class TeamsController {
   public static async findAll(_req: Request, res: Response): Promise<Response> {

@@ -1,10 +1,6 @@
 import { Request, Response } from 'express';
-import ILeaderboard from '../interfaces/ILeaderboard';
-import IMatch from '../interfaces/IMatch';
-import ITeam from '../interfaces/ITeam';
-import LeaderboardService from '../services/LeaderboardService';
-import MatchesService from '../services/MatchesService';
-import TeamsService from '../services/TeamsService';
+import { LeaderboardService, MatchesService, TeamsService } from '../services';
+import { IMatch, ITeam, ILeaderboard } from '../interfaces';
 
 export default class LeaderboardController {
   public static async get(req: Request, res: Response): Promise<Response> {

@@ -1,6 +1,6 @@
-import HttpError from '../utils/HttpError';
-import IMatch, { IGoals, INewMatch } from '../interfaces/IMatch';
-import Match from '../database/models/MatchModel';
+import { Match } from '../database/models';
+import { HttpError } from '../utils';
+import { IMatch, IGoals, INewMatch } from '../interfaces';
 import { newMatchSchema, updateMatchSchema } from './validations/schemas';
 import TeamsService from './TeamsService';
 

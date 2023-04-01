@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import IMatch from '../interfaces/IMatch';
-import MatchesService from '../services/MatchesService';
+import { IMatch } from '../interfaces';
+import { MatchesService } from '../services';
 
 export default class MatchesController {
   public static async findAll(req: Request, res: Response): Promise<Response> {

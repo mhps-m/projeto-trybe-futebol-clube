@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcryptjs';
-import { IUser, ILogin } from '../interfaces/IUser';
-import HttpError from '../utils/HttpError';
-import User from '../database/models/UserModel';
+import { IUser, ILogin } from '../interfaces';
+import { HttpError } from '../utils';
+import { User } from '../database/models';
 import Auth from '../auth/Auth';
 import { loginSchema } from './validations/schemas';
 

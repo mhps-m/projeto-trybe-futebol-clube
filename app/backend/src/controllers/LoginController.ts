@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { IUser } from '../interfaces/IUser';
-import LoginService from '../services/LoginService';
+import { IUser } from '../interfaces';
+import { LoginService } from '../services';
 
 export default class LoginController {
   public static async login(req: Request, res: Response): Promise<Response> {

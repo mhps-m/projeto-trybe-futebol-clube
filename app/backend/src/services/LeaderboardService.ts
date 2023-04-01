@@ -1,6 +1,5 @@
-import ILeaderboard from '../interfaces/ILeaderboard';
-import LeaderboardOperations from '../utils/LeaderboardOperations';
-import ITeam from '../interfaces/ITeam';
+import { LeaderboardOperations } from '../utils';
+import { ITeam, ILeaderboard } from '../interfaces';
 
 export default class LeaderboardService extends LeaderboardOperations {
   private teamLeaderboard(

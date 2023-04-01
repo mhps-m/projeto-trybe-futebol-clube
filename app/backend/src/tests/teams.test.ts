@@ -5,7 +5,7 @@ import chaiHttp = require('chai-http');
 
 import { Response } from 'superagent';
 import { app } from '../app';
-import Team from '../database/models/TeamModel';
+import { Team } from '../database/models';
 
 import { teamMock, teamsMock } from './mocks/teams.mock';
 
@@ -13,13 +13,13 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Testes de integração para a rota /teams', () => {
+describe('Testes de integração para a rota /teams', function() {
   let chaiHttpResponse: Response;
 
   afterEach(sinon.restore);
 
-  describe('Testa a rota GET /teams, retornando todos os times cadastrados', () => {
-    it('Testa se a requisição retorna os dados corretamente', async () => {
+  describe('Testa a rota GET /teams, retornando todos os times cadastrados', function() {
+    it('Testa se a requisição retorna os dados corretamente', async function() {
       sinon
         .stub(Team, 'findAll')
         .resolves([
@@ -35,8 +35,8 @@ describe('Testes de integração para a rota /teams', () => {
     });
   });
 
-  describe('Testa a rota GET /teams/:id, retornando o time com id correspondente', () => {
-    it('Testa se a requisição retorna um time ao passar um id existente', async () => {
+  describe('Testa a rota GET /teams/:id, retornando o time com id correspondente', function() {
+    it('Testa se a requisição retorna um time ao passar um id existente', async function() {
       sinon
         .stub(Team, 'findByPk')
         .resolves(teamMock as Team);
@@ -49,7 +49,7 @@ describe('Testes de integração para a rota /teams', () => {
       expect(chaiHttpResponse.body).to.deep.equal(teamMock);
     });
 
-    it('Testa se a requisição retorna um erro quando um time correspondente não é encontrado', async () => {
+    it('Testa se a requisição retorna um erro quando um time correspondente não é encontrado', async function() {
       sinon
         .stub(Team, 'findByPk')
         .resolves(undefined);

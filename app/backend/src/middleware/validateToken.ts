@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { IUser } from '../interfaces/IUser';
-import LoginService from '../services/LoginService';
+import { IUser } from '../interfaces';
+import { LoginService } from '../services';
 import Auth from '../auth/Auth';
-import HttpError from '../utils/HttpError';
+import { HttpError } from '../utils';
 
 export default async function validateToken(
   req: Request,

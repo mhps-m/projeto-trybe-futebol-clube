@@ -1,6 +1,9 @@
-import { Sequelize } from 'sequelize';
-import * as config from '../config/database';
+import Match from './MatchModel';
+import Team from './TeamModel';
+import User from './UserModel';
 
-const sequelize = new Sequelize(config)
-
-export default sequelize;
+export {
+  Match,
+  Team,
+  User,
+};

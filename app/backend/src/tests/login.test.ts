@@ -6,7 +6,7 @@ import chaiHttp = require('chai-http');
 import { Response } from 'superagent';
 import Auth from '../auth/Auth';
 import { app } from '../app';
-import User from '../database/models/UserModel';
+import { User } from '../database/models';
 
 import {
   loginMock,
@@ -22,13 +22,13 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Testes de integração para a rota /login', () => {
-  describe('Testa a rota POST /login', () => {
+describe('Testes de integração para a rota /login', function() {
+  describe('Testa a rota POST /login', function() {
     let chaiHttpResponse: Response;
 
     afterEach(sinon.restore);
 
-    it('Testa se é possível fazer login com sucesso', async () => {
+    it('Testa se é possível fazer login com sucesso', async function() {
       sinon
         .stub(User, 'findOne')
         .resolves(userMock as User);
@@ -47,8 +47,8 @@ describe('Testes de integração para a rota /login', () => {
         .to.deep.equal(loginMock);
     });
 
-    describe('Testa se retorna erro ao passar dados incompletos', () => {
-      it('Ao passar apenas o email', async () => {
+    describe('Testa se retorna erro ao passar dados incompletos', function() {
+      it('Ao passar apenas o email', async function() {
         chaiHttpResponse = await chai
           .request(app)
           .post('/login')
@@ -60,7 +60,7 @@ describe('Testes de integração para a rota /login', () => {
         expect(chaiHttpResponse.body).to.deep.equal({ message: loginErrors.missingFields });
       });
 
-      it('Ao passar apenas a senha', async () => {
+      it('Ao passar apenas a senha', async function() {
         chaiHttpResponse = await chai
           .request(app)
           .post('/login')
@@ -73,8 +73,8 @@ describe('Testes de integração para a rota /login', () => {
       });
     });
 
-    describe('Testa se retorna erro ao passar dados incorretos', () => {
-      it('Ao passar email inexistente', async () => {
+    describe('Testa se retorna erro ao passar dados incorretos', function() {
+      it('Ao passar email inexistente', async function() {
         sinon
           .stub(User, 'findOne')
           .resolves(null);
@@ -91,7 +91,7 @@ describe('Testes de integração para a rota /login', () => {
         expect(chaiHttpResponse.body).to.deep.equal({ message: loginErrors.invalidFields });
       });
 
-      it('Ao passar email correto com formato inválido', async () => {
+      it('Ao passar email correto com formato inválido', async function() {
         sinon
           .stub(User, 'findOne')
           .resolves({ ...invalidEmailMock } as User);
@@ -105,7 +105,7 @@ describe('Testes de integração para a rota /login', () => {
         expect(chaiHttpResponse.body).to.deep.equal({ message: loginErrors.invalidFields });
       });
 
-      it('Ao passar senha incorreta', async () => {
+      it('Ao passar senha incorreta', async function() {
         sinon
           .stub(User, 'findOne')
           .resolves(userMock as User);
@@ -122,7 +122,7 @@ describe('Testes de integração para a rota /login', () => {
         expect(chaiHttpResponse.body).to.deep.equal({ message: loginErrors.invalidFields });
       });
 
-      it('Ao passar senha correta com formato inválido', async () => {
+      it('Ao passar senha correta com formato inválido', async function() {
         sinon
           .stub(User, 'findOne')
           .resolves(invalidPasswordMock as User);
@@ -138,14 +138,14 @@ describe('Testes de integração para a rota /login', () => {
     });
   });
 
-  describe('Testes de integração para a rota GET /login/role', () => {
+  describe('Testes de integração para a rota GET /login/role', function() {
     let chaiHttpResponse: Response;
     let getToken: Response;
 
     afterEach(sinon.restore);
 
-    describe('Retorna a "role" do usuário autenticado', () => {
-      it('Testa se é possível receber a role com sucesso', async () => {
+    describe('Retorna a "role" do usuário autenticado', function() {
+      it('Testa se é possível receber a role com sucesso', async function() {
         sinon
           .stub(User, 'findOne')
           .resolves(userMock as User);
@@ -168,7 +168,7 @@ describe('Testes de integração para a rota /login', () => {
         expect(chaiHttpResponse.body).to.deep.equal({ role: userMock.role });
       });
 
-      it('Testa se retorna erro ao não passar um token', async () => {
+      it('Testa se retorna erro ao não passar um token', async function() {
         chaiHttpResponse = await chai
           .request(app)
           .get('/login/role');
@@ -177,7 +177,7 @@ describe('Testes de integração para a rota /login', () => {
         expect(chaiHttpResponse.body).to.deep.equal({ message: loginErrors.missingToken });
       });
 
-      it('Testa se retorna erro ao passar token inválido', async () => {
+      it('Testa se retorna erro ao passar token inválido', async function() {
         sinon
           .stub(User, 'findOne')
           .resolves(null);

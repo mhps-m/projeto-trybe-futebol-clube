@@ -1,6 +1,6 @@
-import HttpError from '../utils/HttpError';
-import Team from '../database/models/TeamModel';
-import ITeam from '../interfaces/ITeam';
+import { HttpError } from '../utils';
+import { Team } from '../database/models';
+import { ITeam } from '../interfaces';
 
 export default class TeamsService {
   public static async findAll(): Promise<ITeam[]> {
