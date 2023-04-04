@@ -40,7 +40,7 @@ Clone o projeto para sua máquina:
 ## Como utilizar
 
   - O front-end é bem simples de utilizar. A página principal '/leaderboard' permite ver o placar dos times e filtrar por times que jogaram como times da casa ou como times visitantes.
-  - Para editar, finalizar e criar novas partidas, faça o login. Utilize o email `admin@admin.com` e senha `secret_user` para efetuar o login.
+  - Para editar, finalizar e criar novas partidas, faça o login. Utilize o email `admin@admin.com` e senha `secret_admin` para efetuar o login.
 
 ![ezgif com-video-to-gif](https://user-images.githubusercontent.com/16674136/229942172-4e2aefd0-d7f4-447f-b9a1-e32ced2c13f5.gif)
 
