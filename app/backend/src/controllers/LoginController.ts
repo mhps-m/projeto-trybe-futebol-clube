@@ -9,7 +9,7 @@ export default class LoginController {
     return res.status(200).json({ token });
   }
 
-  public static async getRole(req: Request, res: Response): Promise<Response> {
+  public static async getRole(_req: Request, res: Response): Promise<Response> {
     const user: IUser = res.locals.user as IUser;
 
     const { role } = user;

@@ -68,9 +68,11 @@ const MatchSettings = () => {
 
   const updateMatch = async (id, updateGoals) => {
     await api.patch(`/matches/${id}`, { ...updateGoals });
+    navigate('/matches')
   };
   const finishMatch = async (id) => {
     await api.patch(`/matches/${id}/finish`);
+    navigate('/matches')
   };
 
   if (!isAuthenticated) return <Loading />;

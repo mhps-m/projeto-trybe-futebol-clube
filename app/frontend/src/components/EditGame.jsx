@@ -85,7 +85,7 @@ EditGame.propTypes = ({
   awayTeamGoals: PropTypes.any,
   idMatch: PropTypes.any,
   getTeam: PropTypes.any,
-  finishMatc: PropTypes.any,
+  finishMatch: PropTypes.any,
   updateMatch: PropTypes.any,
 }).isRequired;
 
