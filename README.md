@@ -15,7 +15,7 @@ Projeto realizado como parte da grade curricular do curso de Desenvolvimento Web
 
 ## Tecnologias utilizadas
 
-**NodeJS**, **Typescript**, **Express**, **Sequelize**, **Chai**
+**NodeJS**, **Docker**, **Typescript**, **Express**, **Sequelize**, **Chai**
 
 ## Instalação
 
