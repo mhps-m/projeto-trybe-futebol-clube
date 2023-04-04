@@ -21,7 +21,7 @@ Projeto realizado como parte da grade curricular do curso de Desenvolvimento Web
 
 Clone o projeto para sua máquina:
 
-`$ git clone https://github.com/mhps-mtrybe-projeto-trybesmith.git`
+`$ git clone https://github.com/mhps-m/projeto-trybe-futebol-clube.git`
 
 
 ## Executando o projeto
@@ -40,8 +40,12 @@ Clone o projeto para sua máquina:
 ## Como utilizar
 
   - O front-end é bem simples de utilizar. A página principal '/leaderboard' permite ver o placar dos times e filtrar por times que jogaram como times da casa ou como times visitantes.
-  - Para editar, finalizar e criar novas partidas, faça o login. Utilize o email `user@user.com` e senha `secret_user` para efetuar o login.
-  
+  - Para editar, finalizar e criar novas partidas, faça o login. Utilize o email `admin@admin.com` e senha `secret_user` para efetuar o login.
+
+![ezgif com-video-to-gif](https://user-images.githubusercontent.com/16674136/229942172-4e2aefd0-d7f4-447f-b9a1-e32ced2c13f5.gif)
+
+![ezgif com-video-to-gif(1)](https://user-images.githubusercontent.com/16674136/229942192-698b1bf8-9011-4ca0-8712-7ccea65fca8a.gif)
+
 ## Documentação do back-end
 <details>
   <summary></summary></ br>
